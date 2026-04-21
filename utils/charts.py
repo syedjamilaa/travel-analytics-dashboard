@@ -243,6 +243,9 @@ def auto_chart(df: pd.DataFrame, question: str = "") -> go.Figure:
 
     # ── Fallback: plain bar on first two columns ────
     if len(cols) >= 2:
-        return bar_chart(df, cols[0], cols[1], title)
+        try:
+            return bar_chart(df, cols[0], cols[1], title)
+        except Exception:
+            pass
 
     return None
