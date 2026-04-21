@@ -1,5 +1,5 @@
 import streamlit as st
-import google.generativeai as genai
+from google import genai
 import pandas as pd
 import os
 import re
@@ -8,19 +8,22 @@ from utils.db import SCHEMA_DESCRIPTION, run_query
 
 load_dotenv()
 
-# Works locally (.env) AND on Streamlit Cloud (st.secrets)
+# Works locally (.env) AND on Streamlit Cloud
 api_key = (
     os.getenv("GEMINI_API_KEY") or
     st.secrets.get("GEMINI_API_KEY", "")
 )
 
-genai.configure(api_key=api_key)
-model = genai.GenerativeModel("gemini-1.5-flash")
+client = genai.Client(api_key=api_key)
+MODEL  = "gemini-3.1-pro-preview"
 
 
 def _call_gemini(prompt: str) -> str:
     """Single reusable wrapper for all Gemini calls."""
-    response = model.generate_content(prompt)
+    response = client.models.generate_content(
+        model=MODEL,
+        contents=prompt
+    )
     return response.text.strip()
 
 
