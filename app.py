@@ -370,9 +370,9 @@ with tab1:
     df_funnel = query_conversion_funnel()
     fig = auto_chart(df_funnel, "conversion funnel drop off steps")
     if fig is not None:
-    st.plotly_chart(fig, use_container_width=True)
+     st.plotly_chart(fig, use_container_width=True)
     else:
-    st.info("Chart could not be generated for this data.")
+     st.info("Chart could not be generated for this data.")
     with st.expander("📋 Data"):
         st.dataframe(df_funnel, hide_index=True)
 
@@ -380,9 +380,9 @@ with tab2:
     df_rev = query_revenue_by_destination()
     fig = auto_chart(df_rev, "revenue by destination")
     if fig is not None:
-    st.plotly_chart(fig, use_container_width=True)
+     st.plotly_chart(fig, use_container_width=True)
     else:
-    st.info("Chart could not be generated for this data.")
+     st.info("Chart could not be generated for this data.")
     with st.expander("📋 Data"):
         st.dataframe(df_rev, hide_index=True)
 
@@ -390,9 +390,9 @@ with tab3:
     df_dev = query_device_performance()
     fig = auto_chart(df_dev, "device performance comparison metrics")
     if fig is not None:
-    st.plotly_chart(fig, use_container_width=True)
+     st.plotly_chart(fig, use_container_width=True)
     else:
-    st.info("Chart could not be generated for this data.")
+     st.info("Chart could not be generated for this data.")
     with st.expander("📋 Data"):
         st.dataframe(df_dev, hide_index=True)
 
@@ -400,9 +400,9 @@ with tab4:
     df_cancel = query_cancellation_by_rating()
     fig = auto_chart(df_cancel, "cancellation rate by rating")
     if fig is not None:
-    st.plotly_chart(fig, use_container_width=True)
+     st.plotly_chart(fig, use_container_width=True)
     else:
-    st.info("Chart could not be generated for this data.")
+     st.info("Chart could not be generated for this data.")
     with st.expander("📋 Data"):
         st.dataframe(df_cancel, hide_index=True)
 
@@ -410,9 +410,9 @@ with tab5:
     df_users = query_new_vs_returning()
     fig = auto_chart(df_users, "new vs returning users comparison")
     if fig is not None:
-    st.plotly_chart(fig, use_container_width=True)
+     st.plotly_chart(fig, use_container_width=True)
     else:
-    st.info("Chart could not be generated for this data.")
+     st.info("Chart could not be generated for this data.")
     with st.expander("📋 Data"):
         st.dataframe(df_users, hide_index=True)
 
