@@ -15,7 +15,7 @@ api_key = (
 )
 
 genai.configure(api_key=api_key)
-model = genai.GenerativeModel("gemini-3.1-pro-preview")
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 
 def _call_gemini(prompt: str) -> str:

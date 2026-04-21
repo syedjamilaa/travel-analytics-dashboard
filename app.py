@@ -328,7 +328,7 @@ if run_button and question:
 
         fig = auto_chart(result["dataframe"], question)
         if fig:
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
         else:
             st.info("Could not auto-generate a chart for this result.")
 
@@ -336,7 +336,7 @@ if run_button and question:
         with st.expander("📋 View Raw Data", expanded=False):
             st.dataframe(
                 result["dataframe"],
-                use_container_width=True,
+                width='stretch',
                 hide_index=True
             )
 
@@ -369,35 +369,35 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 with tab1:
     df_funnel = query_conversion_funnel()
     fig = auto_chart(df_funnel, "conversion funnel drop off steps")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     with st.expander("📋 Data"):
         st.dataframe(df_funnel, hide_index=True)
 
 with tab2:
     df_rev = query_revenue_by_destination()
     fig = auto_chart(df_rev, "revenue by destination")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     with st.expander("📋 Data"):
         st.dataframe(df_rev, hide_index=True)
 
 with tab3:
     df_dev = query_device_performance()
     fig = auto_chart(df_dev, "device performance comparison metrics")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     with st.expander("📋 Data"):
         st.dataframe(df_dev, hide_index=True)
 
 with tab4:
     df_cancel = query_cancellation_by_rating()
     fig = auto_chart(df_cancel, "cancellation rate by rating")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     with st.expander("📋 Data"):
         st.dataframe(df_cancel, hide_index=True)
 
 with tab5:
     df_users = query_new_vs_returning()
     fig = auto_chart(df_users, "new vs returning users comparison")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     with st.expander("📋 Data"):
         st.dataframe(df_users, hide_index=True)
 
