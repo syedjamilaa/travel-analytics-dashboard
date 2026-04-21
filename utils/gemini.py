@@ -1,5 +1,5 @@
 import streamlit as st
-from google import genai
+import google.genai as genai
 import pandas as pd
 import os
 import re
