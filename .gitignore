@@ -179,3 +179,8 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Travel Analytics - Project specific
+data/travel.db
+secrets_template.txt
+test_*.py
