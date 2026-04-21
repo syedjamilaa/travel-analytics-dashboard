@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import os 
 from utils.db import (
     run_query,
     query_conversion_funnel,
@@ -21,6 +22,32 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+# ══════════════════════════════════════════════════
+# AUTO-GENERATE DATABASE IF NOT EXISTS
+# ══════════════════════════════════════════════════
+import subprocess
+import sys
+
+db_path = os.path.join("data", "travel.db")
+
+if not os.path.exists(db_path):
+    st.info("⚙️ First run detected — generating database (this takes 60–90 seconds)...")
+    try:
+        result = subprocess.run(
+            [sys.executable, "data/generate_data.py"],
+            capture_output=True,
+            text=True,
+            timeout=300
+        )
+        if result.returncode == 0:
+            st.success("✅ Database ready! Reloading...")
+            st.rerun()
+        else:
+            st.error(f"Database generation failed:\n{result.stderr}")
+            st.stop()
+    except subprocess.TimeoutExpired:
+        st.error("Database generation timed out. Please reload the page.")
+        st.stop()
 
 # ══════════════════════════════════════════════════
 # CUSTOM CSS
@@ -152,38 +179,42 @@ st.divider()
 
 @st.cache_data(ttl=3600)
 def load_kpis():
-    total_revenue = run_query("""
-        SELECT ROUND(SUM(total_price)/1000000, 2) as val
+    def scalar(sql):
+        df = run_query(sql)
+        return df.iloc[0, 0]  # always gets first cell, regardless of column name
+
+    total_revenue = scalar("""
+        SELECT ROUND(SUM(total_price)/1000000, 2)
         FROM bookings WHERE status != 'cancelled'
-    """)['val'][0]
+    """)
 
-    total_bookings = run_query("""
-        SELECT COUNT(*) as val FROM bookings
-    """)['val'][0]
+    total_bookings = scalar("""
+        SELECT COUNT(*) FROM bookings
+    """)
 
-    completion_rate = run_query("""
-        SELECT ROUND(SUM(CASE WHEN status='completed' 
-                    THEN 1.0 ELSE 0 END)/COUNT(*)*100,1) as val
+    completion_rate = scalar("""
+        SELECT ROUND(SUM(CASE WHEN status='completed'
+                    THEN 1.0 ELSE 0 END)/COUNT(*)*100,1)
         FROM bookings
-    """)['val'][0]
+    """)
 
-    top_destination = run_query("""
+    top_destination = scalar("""
         SELECT destination FROM bookings
         WHERE status != 'cancelled'
         GROUP BY destination
         ORDER BY SUM(total_price) DESC LIMIT 1
-    """)['destination'][0]
+    """)
 
-    avg_booking = run_query("""
-        SELECT ROUND(AVG(total_price),0) as val
+    avg_booking = scalar("""
+        SELECT ROUND(AVG(total_price),0)
         FROM bookings WHERE status != 'cancelled'
-    """)['val'][0]
+    """)
 
-    mobile_share = run_query("""
-        SELECT ROUND(SUM(CASE WHEN device='mobile' 
-                    THEN 1.0 ELSE 0 END)/COUNT(*)*100,1) as val
+    mobile_share = scalar("""
+        SELECT ROUND(SUM(CASE WHEN device='mobile'
+                    THEN 1.0 ELSE 0 END)/COUNT(*)*100,1)
         FROM bookings
-    """)['val'][0]
+    """)
 
     return total_revenue, total_bookings, completion_rate, \
            top_destination, avg_booking, mobile_share
